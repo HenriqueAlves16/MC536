@@ -27,7 +27,7 @@
     </select>
 
     <!-- Formulários -->
-    <div id="form-municipio" class="form-container">
+    <div id="form-municipio-container" class="form-container">
         <h2>Inserir Município</h2>
         <form action="/inserir_municipio" method="post">
             <label for="nome">Nome:</label>
@@ -54,7 +54,7 @@
         </form>
     </div>
 
-    <div id="form-profissional_saude" class="form-container">
+    <div id="form-profissional_saude-container" class="form-container">
         <h2>Inserir Profissional de Saúde</h2>
         <form action="/inserir_profissional_saude" method="post">
             <label for="cpf_profissional">CPF:</label>
@@ -72,25 +72,26 @@
         </form>
     </div>
 
-    <div id="form-doenca" class="form-container">
+    <div id="form-doenca-container" class="form-container">
         <h2>Inserir Doença</h2>
-        <form action="/inserir_doenca" method="post">
+        <form id="form-doenca">
             <label for="nome_doenca">Nome:</label>
             <input type="text" id="nome_doenca" name="nome_doenca" required><br>
-
+    
             <label for="letalidade">Letalidade:</label>
-            <input type="number" id="letalidade" name="letalidade" step="0.1" required><br>
-
+            <input type="number" id="letalidade" name="letalidade" step="0.01" required><br>
+    
             <label for="contagioso">Contagioso:</label>
             <select id="contagioso" name="contagioso">
                 <option value="TRUE">Sim</option>
                 <option value="FALSE">Não</option>
             </select><br>
-            <button type="submit">Inserir</button>
+    
+            <button id="form-doenca-submit" type="submit">Inserir</button>
         </form>
     </div>
 
-    <div id="form-paciente" class="form-container">
+    <div id="form-paciente-container" class="form-container">
         <h2>Inserir Paciente</h2>
         <form action="/inserir_paciente" method="post">
             <label for="cpf_paciente">CPF:</label>
@@ -112,7 +113,7 @@
         </form>
     </div>
 
-    <div id="form-unidade_saude" class="form-container">
+    <div id="form-unidade_saude-container" class="form-container">
         <h2>Inserir Unidade de Saúde</h2>
         <form action="/inserir_unidade_saude" method="post">
             <label for="nome_unidade">Nome:</label>
@@ -127,7 +128,7 @@
         </form>
     </div>
 
-    <div id="form-investimento" class="form-container">
+    <div id="form-investimento-container" class="form-container">
         <h2>Inserir Investimento</h2>
         <form action="/inserir_investimento" method="post">
             <label for="ref_municipio_investimento">Município de Referência (ID):</label>
@@ -143,7 +144,7 @@
         </form>
     </div>
 
-    <div id="form-diagnostico" class="form-container">
+    <div id="form-diagnostico-container" class="form-container">
         <h2>Inserir Diagnóstico</h2>
         <form action="/inserir_diagnostico" method="post">
             <label for="ref_paciente_diagnostico">Paciente (CPF):</label>
@@ -156,7 +157,7 @@
         </form>
     </div>
 
-    <div id="form-atuacao" class="form-container">
+    <div id="form-atuacao-container" class="form-container">
         <h2>Inserir Atuação</h2>
         <form action="/inserir_atuacao" method="post">
             <label for="ref_unidade_atuacao">Unidade de Saúde (ID):</label>
@@ -174,7 +175,7 @@
         </form>
     </div>
 
-    <div id="form-atendimento" class="form-container">
+    <div id="form-atendimento-container" class="form-container">
         <h2>Inserir Atendimento</h2>
         <form action="/inserir_atendimento" method="post">
             <label for="ref_paciente_atendimento">Paciente (CPF):</label>
@@ -190,6 +191,11 @@
             <input type="text" id="ref_profissional_atendimento" name="ref_profissional" required><br>
             <button type="submit">Inserir</button>
         </form>
+    </div>
+        
+    <!-- Toast de feedback -->
+    <div id="toast" class="toast">
+        Dados inseridos com sucesso!
     </div>
 </body>
 </html>
