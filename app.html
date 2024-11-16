@@ -29,9 +29,9 @@
     <!-- Formulários -->
     <div id="form-municipio-container" class="form-container">
         <h2>Inserir Município</h2>
-        <form action="/inserir_municipio" method="post">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required><br>
+        <form id="form-municipio" action="/inserir_municipio" method="post">
+            <label for="nome_municipio">Nome:</label>
+            <input type="text" id="nome" name="nome_municipio" required><br>
 
             <label for="estado">Estado:</label>
             <input type="text" id="estado" name="estado" maxlength="2" required><br>
@@ -56,7 +56,7 @@
 
     <div id="form-profissional_saude-container" class="form-container">
         <h2>Inserir Profissional de Saúde</h2>
-        <form action="/inserir_profissional_saude" method="post">
+        <form id="form-profissional" action="/inserir_profissional_saude" method="post">
             <label for="cpf_profissional">CPF:</label>
             <input type="text" id="cpf_profissional" name="cpf_profissional" required><br>
 
@@ -93,7 +93,7 @@
 
     <div id="form-paciente-container" class="form-container">
         <h2>Inserir Paciente</h2>
-        <form action="/inserir_paciente" method="post">
+        <form id="form-paciente" action="/inserir_paciente" method="post">
             <label for="cpf_paciente">CPF:</label>
             <input type="text" id="cpf_paciente" name="cpf_paciente" required><br>
 
@@ -115,7 +115,7 @@
 
     <div id="form-unidade_saude-container" class="form-container">
         <h2>Inserir Unidade de Saúde</h2>
-        <form action="/inserir_unidade_saude" method="post">
+        <form id="form-unidade-saude" action="/inserir_unidade_saude" method="post">
             <label for="nome_unidade">Nome:</label>
             <input type="text" id="nome_unidade" name="nome_unidade" required><br>
 
@@ -130,15 +130,15 @@
 
     <div id="form-investimento-container" class="form-container">
         <h2>Inserir Investimento</h2>
-        <form action="/inserir_investimento" method="post">
+        <form id="form-investimento" action="/inserir_investimento" method="post">
             <label for="ref_municipio_investimento">Município de Referência (ID):</label>
-            <input type="number" id="ref_municipio_investimento" name="ref_municipio" required><br>
+            <input type="number" id="ref_municipio_investimento" name="ref_municipio_investimento" required><br>
 
             <label for="valor_investimento">Valor do Investimento:</label>
-            <input type="number" id="valor_investimento" name="valor" step="0.01" required><br>
+            <input type="number" id="valor_investimento" name="valor_investimento" step="0.01" required><br>
 
             <label for="data_investimento">Data:</label>
-            <input type="date" id="data_investimento" name="data" required><br>
+            <input type="date" id="data_investimento" name="data_investimento" required><br>
 
             <button type="submit">Inserir</button>
         </form>
@@ -146,7 +146,7 @@
 
     <div id="form-diagnostico-container" class="form-container">
         <h2>Inserir Diagnóstico</h2>
-        <form action="/inserir_diagnostico" method="post">
+        <form id="form-diagnostico" action="/inserir_diagnostico" method="post">
             <label for="ref_paciente_diagnostico">Paciente (CPF):</label>
             <input type="text" id="ref_paciente_diagnostico" name="ref_paciente" required><br>
 
@@ -159,7 +159,7 @@
 
     <div id="form-atuacao-container" class="form-container">
         <h2>Inserir Atuação</h2>
-        <form action="/inserir_atuacao" method="post">
+        <form id="form-atuacao" action="/inserir_atuacao" method="post">
             <label for="ref_unidade_atuacao">Unidade de Saúde (ID):</label>
             <input type="number" id="ref_unidade_atuacao" name="ref_unidade" required><br>
 
@@ -177,18 +177,18 @@
 
     <div id="form-atendimento-container" class="form-container">
         <h2>Inserir Atendimento</h2>
-        <form action="/inserir_atendimento" method="post">
+        <form id="form-atendimento" action="/inserir_atendimento" method="post">
             <label for="ref_paciente_atendimento">Paciente (CPF):</label>
-            <input type="text" id="ref_paciente_atendimento" name="ref_paciente" required><br>
+            <input type="text" id="ref_paciente_atendimento" name="ref_paciente_atendimento" required><br>
 
             <label for="data_atendimento">Data e Hora:</label>
-            <input type="datetime-local" id="data_atendimento" name="data" required><br>
+            <input type="datetime-local" id="data_atendimento" name="data_atendimento" required><br>
 
             <label for="ref_unidade_atendimento">Unidade de Saúde (ID):</label>
-            <input type="number" id="ref_unidade_atendimento" name="ref_unidade" required><br>
+            <input type="number" id="ref_unidade_atendimento" name="ref_unidade_atendimento" required><br>
 
             <label for="ref_profissional_atendimento">Profissional de Saúde (CPF):</label>
-            <input type="text" id="ref_profissional_atendimento" name="ref_profissional" required><br>
+            <input type="text" id="ref_profissional_atendimento" name="ref_profissional_atendimento" required><br>
             <button type="submit">Inserir</button>
         </form>
     </div>
