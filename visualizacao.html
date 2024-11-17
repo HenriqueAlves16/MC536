@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="visualizacao.css">
+    <link rel="stylesheet" href="shared_style.css">
+
+    <title>Visualização de Dados</title>
+    <script src="visualizacao.js"></script>
+</head>
+<body>
+    <a href="homepage.html" class="btn-voltar">
+        <span class="seta"></span>
+    </a>
+    <h1>Visualização de Dados</h1>
+
+    <!-- Seleção de entidade -->
+    <label for="entidade">Escolha a entidade:</label>
+    <select id="entidade">
+        <option value="">-- Selecione uma entidade --</option>
+        <option value="municipio">Município</option>
+        <option value="profissional_saude">Profissional de Saúde</option>
+        <option value="doenca">Doença</option>
+        <option value="paciente">Paciente</option>
+        <option value="unidade_saude">Unidade de Saúde</option>
+        <option value="investimento">Investimento</option>
+        <option value="diagnostico">Diagnóstico</option>
+        <option value="atuacao">Atuação</option>
+        <option value="atendimento">Atendimento</option>
+    </select>
+
+    <!-- Exibição de dados -->
+    <div id="dados-visualizacao">
+        <p>Os dados selecionados serão exibidos aqui.</p>
+    </div>
+</body>
+</html>

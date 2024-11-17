@@ -1,14 +1,13 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');  // Importando o CORS
 
 const app = express();
 const port = 3000;
 
-// Usando CORS para permitir requisições de qualquer origem (ou de uma origem específica)
-app.use(cors());  // Permite requisições de todas as origens
-app.use(express.json()); // Middleware para processar JSON no corpo da requisição
+// Middleware
+app.use(cors());
+app.use(express.json());
 
 // Conectar ao banco de dados SQLite (ou criar um novo)
 const db = new sqlite3.Database('./banco_de_dados.db', (err) => {
@@ -176,7 +175,17 @@ app.post('/inserir_atendimento', (req, res) => {
     inserirDados('atendimento', ['ref_paciente_atendimento', 'data_atendimento', 'ref_unidade_atendimento', 'ref_profissional_atendimento'], [ref_paciente_atendimento, data_atendimento, ref_unidade_atendimento, ref_profissional_atendimento], res);
 });
 
+app.get("/visualizar_municipio", (req, res) => {
+    db.all("SELECT * FROM municipio", [], (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).json({ error: "Erro ao consultar o banco de dados." });
+        }
+        res.status(200).json(rows);
+    });
+});
+
 // Iniciar o servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-});
+})

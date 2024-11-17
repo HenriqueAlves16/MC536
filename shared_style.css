@@ -1,0 +1,59 @@
+.btn-voltar {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+}
+
+.btn-voltar:hover {
+    background-color: #0056b3;
+}
+
+.seta {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-left: 3px solid white;
+    border-bottom: 3px solid white;
+    transform: rotate(45deg);
+    margin-left: 5px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: block;
+    justify-items: center;
+    align-items: center;
+    height: 100vh;
+}
+
+select {
+    width: fit-content;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #fff;
+    color: #555;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    appearance: none; /* Remove a seta padrão em alguns navegadores */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="gray" d="M2 0L0 2h4zM2 5L0 3h4z"/></svg>'); 
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+}

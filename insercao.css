@@ -1,14 +1,3 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-    display: block;
-    justify-items: center;
-    align-items: center;
-    height: 100vh;
-}
-
 .form-container {
     display: none;
 }
@@ -72,23 +61,6 @@ form button:hover {
 
 .form-container {
     display: none;
-}
-
-select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    background-color: #fff;
-    color: #555;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    appearance: none; /* Remove a seta padrão em alguns navegadores */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="gray" d="M2 0L0 2h4zM2 5L0 3h4z"/></svg>'); 
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 10px;
 }
 
 select:focus {
