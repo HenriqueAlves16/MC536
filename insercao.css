@@ -1,9 +1,31 @@
-.form-container {
-    display: none;
+/* Seleção de entidade */
+label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
 }
 
+#entidade {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#entidade:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* Formulário */
 .form-container {
-    display: block; /* Para visualização, ajuste com JavaScript conforme necessário */
+    display: none; /* Controlado por JavaScript */
     width: 100%;
     max-width: 400px;
     background: #fff;
@@ -11,11 +33,17 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
     box-sizing: border-box;
+    margin-top: 20px;
+}
+
+.form-container.show {
+    display: block;
 }
 
 h2 {
     text-align: center;
     color: #333;
+    margin-bottom: 20px;
 }
 
 form label {
@@ -39,6 +67,7 @@ form button {
     margin-bottom: 10px;
     font-size: 14px;
     box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 form input:focus {
@@ -52,49 +81,31 @@ form button {
     color: #fff;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 form button:hover {
     background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.form-container {
-    display: none;
-}
-
-select:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-}
-
-option {
-    padding: 10px;
-    font-size: 14px;
-    color: #333;
-}
-
-#entidade {
-    width: auto;
-}
-
-/* Estilo do Toast */
+/* Toast */
 .toast {
     visibility: hidden;
-    min-width: 250px;
+    min-width: 300px;
     margin: 0 auto;
     background-color: #189607;
     color: #fff;
     text-align: center;
     border-radius: 5px;
-    padding: 10px;
+    padding: 15px;
     position: fixed;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-    font-size: 17px;
+    font-size: 16px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: opacity 0.5s ease, visibility 0.5s ease;
