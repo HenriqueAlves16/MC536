@@ -24,3 +24,7 @@
     * Clone o repositório
     * Execute `npm init -y` que criará um arquivo package.json, que irá gerenciar as dependências do projeto.
     * Instalar o Express (framework para criar o servidor web), sqlite3 e cors: `npm install express sqlite3 cors`
+  
+4) **Rode a aplicação**
+   * Clique no botão 'Go Live' no canto inferior esquerdo do VSCode 
+   * Navegue para a URL http://127.0.0.1:5500/homepage.html em seu navegador (assumindo que o Live Server esteja rodando na porta 5500)
