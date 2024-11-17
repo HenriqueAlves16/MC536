@@ -175,15 +175,27 @@ app.post('/inserir_atendimento', (req, res) => {
     inserirDados('atendimento', ['ref_paciente_atendimento', 'data_atendimento', 'ref_unidade_atendimento', 'ref_profissional_atendimento'], [ref_paciente_atendimento, data_atendimento, ref_unidade_atendimento, ref_profissional_atendimento], res);
 });
 
-app.get("/visualizar_municipio", (req, res) => {
-    db.all("SELECT * FROM municipio", [], (err, rows) => {
-        if (err) {
-            console.error(err.message);
-            return res.status(500).json({ error: "Erro ao consultar o banco de dados." });
-        }
-        res.status(200).json(rows);
+// Função genérica para criar rotas de visualização
+function criarRotaVisualizacao(entidade) {
+    app.get(`/visualizar_${entidade}`, (req, res) => {
+        db.all(`SELECT * FROM ${entidade}`, [], (err, rows) => {
+            if (err) {
+                console.error(`Erro ao consultar ${entidade}:`, err.message);
+                return res.status(500).json({ error: `Erro ao consultar ${entidade}.` });
+            }
+            res.status(200).json(rows);
+        });
     });
-});
+}
+
+// Lista de entidades
+const entidades = [
+    "municipio", "profissional_saude", "doenca", "paciente", "unidade_saude",
+    "investimento", "diagnostico", "atuacao", "atendimento"
+];
+
+// Criar rotas dinamicamente
+entidades.forEach(entidade => criarRotaVisualizacao(entidade));
 
 // Iniciar o servidor
 app.listen(port, () => {
