@@ -175,6 +175,19 @@ app.post('/inserir_atendimento', (req, res) => {
     inserirDados('atendimento', ['ref_paciente_atendimento', 'data_atendimento', 'ref_unidade_atendimento', 'ref_profissional_atendimento'], [ref_paciente_atendimento, data_atendimento, ref_unidade_atendimento, ref_profissional_atendimento], res);
 });
 
+app.get('/search', (req, res) => {
+    const query = req.query.q;
+    
+    // Evitar SQL Injection com parâmetro de busca seguro
+    db.all(`SELECT * FROM municipio WHERE nome_municipio LIKE ?`, [`%${query}%`], (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+        } else {
+            res.json(rows);
+        }
+    });
+});
+
 // Função genérica para criar rotas de visualização
 function criarRotaVisualizacao(entidade) {
     app.get(`/visualizar_${entidade}`, (req, res) => {

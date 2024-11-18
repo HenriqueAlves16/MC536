@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Municípios</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        input { width: 100%; padding: 10px; font-size: 16px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 10px; border-bottom: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Buscar Municípios</h1>
+        <input type="text" id="searchInput" placeholder="Digite o nome do município...">
+        <ul id="resultList"></ul>
+    </div>
+
+    <script type="module">
+        import { renderizarTabela } from './util.js';
+
+        const searchInput = document.getElementById('searchInput');
+        const resultList = document.getElementById('resultList');
+
+        // Função para buscar os dados do servidor
+        searchInput.addEventListener('input', async function() {
+            const query = searchInput.value.trim();
+            if (query.length < 2) {  // Esperar até 3 caracteres para fazer a busca
+                resultList.innerHTML = '';  // Limpar os resultados se a busca for muito curta
+                return;
+            }
+
+            try {
+                // Fazer uma requisição GET para a rota de busca do servidor
+                const response = await fetch(`http://localhost:3000/search?q=${query}`);
+                const results = await response.json();
+                console.info(results)
+
+                // Limpar resultados anteriores
+                resultList.innerHTML = renderizarTabela(dados);;
+            } catch (error) {
+                console.error('Erro ao buscar:', error);
+            }
+        });
+    </script>
+</body>
+</html>
