@@ -27,4 +27,7 @@
   
 4) **Rode a aplicação**
    * Clique no botão 'Go Live' no canto inferior esquerdo do VSCode 
+   * Rodar o servidor `node server.js`
+   * Senão tiver carregado os dados no banco ainda execute  `node populate.js` (após executar pelo menos uma vez o server.js para gerar as tabelas)
    * Navegue para a URL http://127.0.0.1:5500/homepage.html em seu navegador (assumindo que o Live Server esteja rodando na porta 5500)
+
