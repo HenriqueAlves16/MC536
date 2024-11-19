@@ -4,34 +4,28 @@ function renderizarTabela(dados, entidade) {
     // Cabeçalho da tabela
     const cabeçalho = `
         <thead>
-            <tr>${colunas.map(col => `<th>${col}</th>`).join('')}</tr>
+            <tr>
+                <th class="acoes">Ações</th>
+                ${colunas.map(col => `<th>${col}</th>`).join('')}
+            </tr>
         </thead>`;
 
-    // Linhas da tabela com IDs para associar aos botões
-    const linhas = dados.map(
-        (row, index) => `
-            <tr data-id="${row.id}" data-index="${index}">
-                ${colunas.map(col => `<td contenteditable="true" data-coluna="${col}">${row[col]}</td>`).join('')}
-            </tr>`
-    ).join('');
+    // Linhas da tabela com botões na mesma iteração
+    const linhas = dados.map(row => {
+        const id = row[colunas[0]]; // Primeiro campo como ID
+        const botoes = `
+            <td class="acoes">
+                <button class="btn-delete" data-id="${id}" data-entidade="${entidade}">❌</button>
+                <button class="btn-edit" data-id="${id}" data-entidade="${entidade}">✏️</button>
+            </td>`;
+        const colunasHTML = colunas.map(col => `<td contenteditable="true" data-coluna="${col}">${row[col]}</td>`).join('');
 
-    // Botões fora da tabela
-    const botoes = dados.map(
-        (row, index) => `
-            <div class="acoes" data-index="${index}">
-                <button class="btn-delete" data-id="${row.id}" data-entidade="${entidade}">❌</button>
-                <button class="btn-edit" data-id="${row.id}" data-entidade="${entidade}">✏️</button>
-            </div>`
-    ).join('');
+        return `<tr data-id="${id}">${botoes}${colunasHTML}</tr>`;
+    }).join('');
 
-    // Retorno da tabela e botões
+    // Retorno da tabela
     return `
         <div class="tabela-container">
-            <!-- Botões para cada linha da tabela -->
-            <div class="botoes-container">
-                ${botoes}
-            </div>
-            <!-- Tabela com as linhas e cabeçalho -->
             <table class="tabela">
                 ${cabeçalho}
                 <tbody>${linhas}</tbody>
@@ -50,7 +44,7 @@ async function carregarDados(entidade) {
         if (!response.ok) throw new Error('Erro ao carregar dados.');
         const dados = await response.json();
         dadosVisualizacao.innerHTML = renderizarTabela(dados, entidade);
-//        adicionarListeners(entidade);
+        adicionarListeners(entidade);
     } catch (error) {
         dadosVisualizacao.innerHTML = `<p>Erro: ${error.message}</p>`;
     }
@@ -60,30 +54,37 @@ async function carregarDados(entidade) {
 function adicionarListeners(entidade) {
     const deleteButtons = document.querySelectorAll('.btn-delete');
     const editButtons = document.querySelectorAll('.btn-edit');
-
+    // Função para lidar com botões de exclusão
     deleteButtons.forEach(button => {
         button.addEventListener('click', async () => {
-            const id = button.getAttribute('data-id');
+            const row = button.closest('tr'); // Obtém a linha associada ao botão
+            const id = row.getAttribute('data-id'); // ID obtido do atributo da linha
+            console.log(`Deletando registro com ID: ${id}`);
+
             try {
                 const response = await fetch(`http://localhost:3000/delete/${entidade}/${id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error('Erro ao excluir registro.');
                 alert('Registro excluído com sucesso!');
-                carregarDados(entidade);
+                carregarDados(entidade); // Recarrega os dados após exclusão
             } catch (error) {
                 alert(error.message);
             }
         });
     });
 
+    // Função para lidar com botões de edição
     editButtons.forEach(button => {
         button.addEventListener('click', async () => {
-            const id = button.getAttribute('data-id');
-            const row = button.closest('tr');
+            const row = button.closest('tr'); // Obtém a linha associada ao botão
+            const id = row.getAttribute('data-id'); // ID obtido do atributo da linha
             const updates = {};
 
+            // Itera pelas células editáveis e coleta os valores
             row.querySelectorAll('[contenteditable="true"]').forEach(cell => {
                 updates[cell.getAttribute('data-coluna')] = cell.textContent.trim();
             });
+
+            console.log(`Atualizando registro com ID: ${id}`, updates);
 
             try {
                 const response = await fetch(`http://localhost:3000/update/${entidade}/${id}`, {
@@ -93,12 +94,12 @@ function adicionarListeners(entidade) {
                 });
                 if (!response.ok) throw new Error('Erro ao atualizar registro.');
                 alert('Registro atualizado com sucesso!');
-                carregarDados(entidade);
+                carregarDados(entidade); // Recarrega os dados atualizados
             } catch (error) {
                 alert(error.message);
             }
         });
-    });
+    });   
 }
 
 

@@ -210,6 +210,62 @@ const entidades = [
 // Criar rotas dinamicamente
 entidades.forEach(entidade => criarRotaVisualizacao(entidade));
 
+// Mapeamento de entidades para os campos específicos
+const entidadeMap = new Map([
+    ['municipio', 'id_municipio'],
+    ['profissional_saude', 'cpf_profissional'],
+    ['doenca', 'id'],
+    ['paciente', 'cpf_paciente'],
+    ['unidade_saude', 'id_unidade'],
+    ['investimento', 'codigo_investimento'],
+    ['diagnostico', 'id_diagnostico'],
+    ['atuacao', 'id_atuacao'],
+]);
+
+// DELETE - Deletar uma linha
+app.delete('/delete/:entidade/:id', (req, res) => {
+    const { entidade, id } = req.params;
+
+    const campo = entidadeMap.get(entidade);
+    if (!campo) {
+        return res.status(400).json({ error: 'Entidade inválida.' });
+    }
+
+    const query = `DELETE FROM ${entidade} WHERE ${campo} = ?`;
+
+    db.run(query, [id], function (err) {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).json({ error: 'Erro ao excluir registro.' });
+        }
+        res.status(200).json({ message: 'Registro excluído com sucesso!' });
+    });
+});
+
+// PUT - Atualizar uma linha
+app.put('/update/:entidade/:id', (req, res) => {
+    const { entidade, id } = req.params;
+
+    const campo = entidadeMap.get(entidade);
+    if (!campo) {
+        return res.status(400).json({ error: 'Entidade inválida.' });
+    }
+
+    const updates = req.body; // Expecta um objeto com os campos a serem atualizados
+    const fields = Object.keys(updates);
+    const values = Object.values(updates);
+
+    const query = `UPDATE ${entidade} SET ${fields.map(f => `${f} = ?`).join(', ')} WHERE ${campo} = ?`;
+
+    db.run(query, [...values, id], function (err) {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).json({ error: 'Erro ao atualizar registro.' });
+        }
+        res.status(200).json({ message: 'Registro atualizado com sucesso!' });
+    });
+});
+
 // Iniciar o servidor
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
