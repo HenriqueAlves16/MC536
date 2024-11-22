@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="municipio.css">
     <title>Busca de Municípios</title>
     <style>
         body { font-family: Arial, sans-serif; }
@@ -13,12 +14,30 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Buscar Municípios</h1>
-        <input type="text" id="searchInput" placeholder="Digite o nome do município...">
-        <ul id="resultList"></ul>
-    </div>
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'tab1')">Aba 1</button>
+        <button class="tab-button" onclick="openTab(event, 'tab2')">Aba 2</button>
+        <button class="tab-button" onclick="openTab(event, 'tab3')">Aba 3</button>
+      </div>
+      <div id="tab1" class="tab-content active">
+        <h3>Conteúdo da Aba 1</h3>
+        <p>Este é o conteúdo da primeira aba.</p>
+      </div>
+    
+      <div id="tab2" class="tab-content">
+        <h3>Conteúdo da Aba 2</h3>
+        <p>Este é o conteúdo da segunda aba.</p>
+      </div>
+    
+      <div id="tab3" class="tab-content">
+        <div class="container">
+            <h1>Buscar Municípios</h1>
+            <input type="text" id="searchInput" placeholder="Digite o nome do município...">
+            <ul id="resultList"></ul>
+        </div>
+      </div>
 
+    <script src="municipio.js"></script>
     <script type="module">
         import { renderizarTabela } from './util.js';
 
@@ -40,7 +59,7 @@
                 console.info(results)
 
                 // Limpar resultados anteriores
-                resultList.innerHTML = renderizarTabela(dados);;
+                resultList.innerHTML = renderizarTabela(results);;
             } catch (error) {
                 console.error('Erro ao buscar:', error);
             }

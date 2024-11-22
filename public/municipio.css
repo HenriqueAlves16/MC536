@@ -1,0 +1,35 @@
+.tabs {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .tab-button:hover {
+    background-color: #ddd;
+  }
+  
+  .tab-button.active {
+    background-color: #ccc;
+    border-bottom: 2px solid #0099cc;
+  }
+  
+  /* Estilo do conteúdo das abas */
+  .tab-content {
+    display: none;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ccc;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
