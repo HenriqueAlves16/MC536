@@ -1,4 +1,8 @@
 function renderizarTabela(dados, entidade) {
+    if (dados.length === 0) {
+        return `<p>Nenhum dado encontrado para a entidade ${entidade}.</p>`;
+    }
+
     const colunas = Object.keys(dados[0]);
 
     // Cabeçalho da tabela
@@ -10,16 +14,39 @@ function renderizarTabela(dados, entidade) {
             </tr>
         </thead>`;
 
-    // Linhas da tabela com botões na mesma iteração
+    // Linhas da tabela
     const linhas = dados.map(row => {
-        const id = row[colunas[0]]; // Primeiro campo como ID
+        // Caso seja a entidade "atendimento", utiliza `ref_paciente_atendimento` e `data_atendimento`
+        if (entidade === 'atendimento') {
+            const refPaciente = row.ref_paciente_atendimento;
+            const dataAtendimento = row.data_atendimento;
+            const botoes = `
+                <td class="acoes">
+                    <button class="btn-delete" 
+                            data-ref-paciente="${refPaciente}" 
+                            data-data-atendimento="${dataAtendimento}" 
+                            data-entidade="${entidade}">
+                        ❌
+                    </button>
+                    <button class="btn-edit" 
+                            data-ref-paciente="${refPaciente}" 
+                            data-data-atendimento="${dataAtendimento}" 
+                            data-entidade="${entidade}">
+                        ✏️
+                    </button>
+                </td>`;
+            const colunasHTML = colunas.map(col => `<td contenteditable="true" data-coluna="${col}">${row[col]}</td>`).join('');
+            return `<tr data-ref-paciente="${refPaciente}" data-data-atendimento="${dataAtendimento}">${botoes}${colunasHTML}</tr>`;
+        }
+
+        // Para outras entidades, renderiza normalmente
+        const id = row[colunas[0]]; // Assume o primeiro campo como ID
         const botoes = `
             <td class="acoes">
                 <button class="btn-delete" data-id="${id}" data-entidade="${entidade}">❌</button>
                 <button class="btn-edit" data-id="${id}" data-entidade="${entidade}">✏️</button>
             </td>`;
         const colunasHTML = colunas.map(col => `<td contenteditable="true" data-coluna="${col}">${row[col]}</td>`).join('');
-
         return `<tr data-id="${id}">${botoes}${colunasHTML}</tr>`;
     }).join('');
 
@@ -54,20 +81,40 @@ async function carregarDados(entidade) {
 function adicionarListeners(entidade) {
     const deleteButtons = document.querySelectorAll('.btn-delete');
     const editButtons = document.querySelectorAll('.btn-edit');
+
     // Função para lidar com botões de exclusão
     deleteButtons.forEach(button => {
         button.addEventListener('click', async () => {
             const row = button.closest('tr'); // Obtém a linha associada ao botão
-            const id = row.getAttribute('data-id'); // ID obtido do atributo da linha
-            console.log(`Deletando registro com ID: ${id}`);
 
-            try {
-                const response = await fetch(`http://localhost:3000/delete/${entidade}/${id}`, { method: 'DELETE' });
-                if (!response.ok) throw new Error('Erro ao excluir registro.');
-                alert('Registro excluído com sucesso!');
-                carregarDados(entidade); // Recarrega os dados após exclusão
-            } catch (error) {
-                alert(error.message);
+            if (entidade === 'atendimento') {
+                // Para a tabela atendimento, utilizamos chaves compostas
+                const refPaciente = row.getAttribute('data-ref-paciente');
+                const dataAtendimento = row.getAttribute('data-data-atendimento');
+
+                console.log(`Deletando atendimento: Paciente ${refPaciente}, Data ${dataAtendimento}`);
+
+                try {
+                    const response = await fetch(`http://localhost:3000/delete/${entidade}/${refPaciente}/${dataAtendimento}`, { method: 'DELETE' });
+                    if (!response.ok) throw new Error('Erro ao excluir atendimento.');
+                    alert('Atendimento excluído com sucesso!');
+                    carregarDados(entidade); // Recarrega os dados após exclusão
+                } catch (error) {
+                    alert(error.message);
+                }
+            } else {
+                // Para outras entidades, mantém o comportamento padrão
+                const id = row.getAttribute('data-id');
+                console.log(`Deletando registro com ID: ${id}`);
+
+                try {
+                    const response = await fetch(`http://localhost:3000/delete/${entidade}/${id}`, { method: 'DELETE' });
+                    if (!response.ok) throw new Error('Erro ao excluir registro.');
+                    alert('Registro excluído com sucesso!');
+                    carregarDados(entidade); // Recarrega os dados após exclusão
+                } catch (error) {
+                    alert(error.message);
+                }
             }
         });
     });
@@ -76,7 +123,6 @@ function adicionarListeners(entidade) {
     editButtons.forEach(button => {
         button.addEventListener('click', async () => {
             const row = button.closest('tr'); // Obtém a linha associada ao botão
-            const id = row.getAttribute('data-id'); // ID obtido do atributo da linha
             const updates = {};
 
             // Itera pelas células editáveis e coleta os valores
@@ -84,24 +130,46 @@ function adicionarListeners(entidade) {
                 updates[cell.getAttribute('data-coluna')] = cell.textContent.trim();
             });
 
-            console.log(`Atualizando registro com ID: ${id}`, updates);
+            if (entidade === 'atendimento') {
+                // Para a tabela atendimento, utilizamos chaves compostas
+                const refPaciente = row.getAttribute('data-ref-paciente');
+                const dataAtendimento = row.getAttribute('data-data-atendimento');
 
-            try {
-                const response = await fetch(`http://localhost:3000/update/${entidade}/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updates),
-                });
-                if (!response.ok) throw new Error('Erro ao atualizar registro.');
-                alert('Registro atualizado com sucesso!');
-                carregarDados(entidade); // Recarrega os dados atualizados
-            } catch (error) {
-                alert(error.message);
+                console.log(`Atualizando atendimento: Paciente ${refPaciente}, Data ${dataAtendimento}`, updates);
+
+                try {
+                    const response = await fetch(`http://localhost:3000/update/${entidade}/${refPaciente}/${dataAtendimento}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updates),
+                    });
+                    if (!response.ok) throw new Error('Erro ao atualizar atendimento.');
+                    alert('Atendimento atualizado com sucesso!');
+                    carregarDados(entidade); // Recarrega os dados atualizados
+                } catch (error) {
+                    alert(error.message);
+                }
+            } else {
+                // Para outras entidades, mantém o comportamento padrão
+                const id = row.getAttribute('data-id');
+                console.log(`Atualizando registro com ID: ${id}`, updates);
+
+                try {
+                    const response = await fetch(`http://localhost:3000/update/${entidade}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updates),
+                    });
+                    if (!response.ok) throw new Error('Erro ao atualizar registro.');
+                    alert('Registro atualizado com sucesso!');
+                    carregarDados(entidade); // Recarrega os dados atualizados
+                } catch (error) {
+                    alert(error.message);
+                }
             }
         });
-    });   
+    });
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const entidadeSelect = document.getElementById("entidade");

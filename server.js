@@ -242,6 +242,31 @@ app.delete('/delete/:entidade/:id', (req, res) => {
     });
 });
 
+app.delete('/delete/atendimento/:ref_paciente/:data_atendimento', (req, res) => {
+    const { entidade, ref_paciente, data_atendimento } = req.params;
+
+    // Monta a query SQL
+    const query = `
+        DELETE FROM atendimento 
+        WHERE ref_paciente_atendimento = ? 
+        AND data_atendimento = ?
+    `;
+
+    // Executa a query com os valores das chaves compostas
+    db.run(query, [ref_paciente, data_atendimento], function (err) {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).json({ error: 'Erro ao excluir registro.' });
+        }
+
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Registro não encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Registro excluído com sucesso!' });
+    });
+});
+
 // PUT - Atualizar uma linha
 app.put('/update/:entidade/:id', (req, res) => {
     const { entidade, id } = req.params;
@@ -262,6 +287,44 @@ app.put('/update/:entidade/:id', (req, res) => {
             console.error(err.message);
             return res.status(500).json({ error: 'Erro ao atualizar registro.' });
         }
+        res.status(200).json({ message: 'Registro atualizado com sucesso!' });
+    });
+});
+
+app.put('/update/atendimento/:ref_paciente/:data_atendimento', (req, res) => {
+    const { entidade, ref_paciente, data_atendimento } = req.params;
+    const updates = req.body;
+
+    // Garantir que o corpo da requisição contém dados para atualização
+    if (!updates || Object.keys(updates).length === 0) {
+        return res.status(400).json({ error: 'Nenhum dado fornecido para atualização.' });
+    }
+
+    // Construir a query dinamicamente com os campos de atualização
+    const campos = Object.keys(updates).map(key => `${key} = ?`).join(', ');
+    const valores = Object.values(updates);
+
+    // Adicionar as chaves compostas à lista de valores
+    valores.push(ref_paciente, data_atendimento);
+
+    const query = `
+        UPDATE atendimento 
+        SET ${campos}
+        WHERE ref_paciente_atendimento = ? 
+        AND data_atendimento = ?
+    `;
+
+    // Executar a query
+    db.run(query, valores, function (err) {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).json({ error: 'Erro ao atualizar registro.' });
+        }
+
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Registro não encontrado.' });
+        }
+
         res.status(200).json({ message: 'Registro atualizado com sucesso!' });
     });
 });
