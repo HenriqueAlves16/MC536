@@ -15,13 +15,18 @@
 </head>
 <body>
     <div class="tabs">
-        <button class="tab-button active" onclick="openTab(event, 'tab1')">Aba 1</button>
+        <button class="tab-button active" onclick="openTab(event, 'tab1')">Unidades de Saúde</button>
         <button class="tab-button" onclick="openTab(event, 'tab2')">Aba 2</button>
-        <button class="tab-button" onclick="openTab(event, 'tab3')">Aba 3</button>
+        <button class="tab-button" onclick="openTab(event, 'tab3')">Municípios</button>
       </div>
       <div id="tab1" class="tab-content active">
-        <h3>Conteúdo da Aba 1</h3>
+        <h3>Unidades de Saúde</h3>
         <p>Este é o conteúdo da primeira aba.</p>
+        <button id="searchButton">Buscar</button>
+        <div class="container">
+            <h1>Buscar Municípios</h1>
+            <ul id="unidadesLista"></ul>
+        </div>
       </div>
     
       <div id="tab2" class="tab-content">
@@ -63,6 +68,28 @@
             } catch (error) {
                 console.error('Erro ao buscar:', error);
             }
+        });
+
+        document.getElementById('searchButton').addEventListener('click', async function() {
+            try {
+                // Make a GET request to the backend API
+                const response = await fetch('http://localhost:3000/unidade_saude');
+                
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar unidades de saúde');
+                }
+
+                // Parse the JSON response
+                const unidades = await response.json();
+                const resultList = document.getElementById('unidadesLista');
+                resultList.innerHTML = renderizarTabela(unidades);;
+                console.log(unidades);
+            
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao buscar as unidades de saúde.');
+            }   
         });
     </script>
 </body>

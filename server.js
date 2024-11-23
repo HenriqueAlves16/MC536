@@ -188,6 +188,21 @@ app.get('/search', (req, res) => {
     });
 });
 
+app.get('/unidade_saude', (req, res) => {
+    const query = req.query.q;
+    sql = `SELECT * FROM municipio;`;
+    
+    // Evitar SQL Injection com parâmetro de busca seguro
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.error(`Erro ao consultar. `, err.message);
+            return res.status(500).json({ error: `Erro ao consultar.` });
+        }
+        res.status(200).json(rows);
+    });
+});
+
+
 // Função genérica para criar rotas de visualização
 function criarRotaVisualizacao(entidade) {
     app.get(`/visualizar_${entidade}`, (req, res) => {

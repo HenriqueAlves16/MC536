@@ -1,3 +1,6 @@
+const searchInput = document.getElementById('searchInput');
+const searchButton = document.getElementById('searchButton');
+const resultList = document.getElementById('resultList');
 
 function openTab(event, tabName) {
     // Esconde todos os conteúdos das abas
