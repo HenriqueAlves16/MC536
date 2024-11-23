@@ -61,10 +61,9 @@
         const searchInput = document.getElementById('searchInput');
         const resultList = document.getElementById('resultList');
 
-        // Função para buscar os dados do servidor
         searchInput.addEventListener('input', async function() {
             const query = searchInput.value.trim();
-            if (query.length < 2) {  // Esperar até 3 caracteres para fazer a busca
+            if (query.length < 2) {  // Esperar até 2 caracteres para fazer a busca
                 resultList.innerHTML = '';  // Limpar os resultados se a busca for muito curta
                 return;
             }
@@ -84,15 +83,12 @@
 
         document.getElementById('searchButton').addEventListener('click', async function() {
             try {
-                // Make a GET request to the backend API
                 const response = await fetch('http://localhost:3000/unidade_saude');
                 
-                // Check if the response is successful
                 if (!response.ok) {
                     throw new Error('Erro ao buscar unidades de saúde');
                 }
 
-                // Parse the JSON response
                 const unidades = await response.json();
                 const resultList = document.getElementById('unidadesLista');
                 resultList.innerHTML = renderizarTabela(unidades);;
@@ -104,15 +100,12 @@
         });
         document.getElementById('searchDoencasButton').addEventListener('click', async function() {
             try {
-                // Make a GET request to the backend API
                 const response = await fetch('http://localhost:3000/doenca');
                 
-                // Check if the response is successful
                 if (!response.ok) {
                     throw new Error('Erro ao buscar unidades de saúde');
                 }
 
-                // Parse the JSON response
                 const doencas = await response.json();
                 const resultList = document.getElementById('doencaLista');
                 resultList.innerHTML = renderizarTabela(doencas);;
