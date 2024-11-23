@@ -12,7 +12,6 @@ export function renderizarTabela(dados) {
     // Adicionando uma classe e um título (opcional)
     return `
         <table class="styled-table">
-            <caption>Dados da Tabela</caption>
             ${cabeçalho}
             <tbody>
                 ${linhas}

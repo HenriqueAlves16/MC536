@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="municipio.css">
+    <link rel="stylesheet" href="shared_style.css">
+    <link rel="stylesheet" href="consultas.css">
     <title>Busca de Municípios</title>
     <style>
         body { font-family: Arial, sans-serif; }
@@ -14,35 +15,46 @@
     </style>
 </head>
 <body>
-    <div class="tabs">
-        <button class="tab-button active" onclick="openTab(event, 'tab1')">Unidades de Saúde</button>
-        <button class="tab-button" onclick="openTab(event, 'tab2')">Aba 2</button>
-        <button class="tab-button" onclick="openTab(event, 'tab3')">Municípios</button>
+   
+    <div class="tabs" style="width: 100%;">
+        <a href="homepage.html" class="btn-voltar">
+            <span class="seta"></span>
+        </a>    
+        <button class="tab-button" onclick="openTab(event, 'tab1')">Municípios</button>
+        <button class="tab-button active" onclick="openTab(event, 'tab2')">Unidades de Saúde</button>
+        <button class="tab-button" onclick="openTab(event, 'tab3')">Doenças</button>
       </div>
-      <div id="tab1" class="tab-content active">
-        <h3>Unidades de Saúde</h3>
-        <p>Este é o conteúdo da primeira aba.</p>
-        <button id="searchButton">Buscar</button>
+
+      <div id="tab2" class="tab-content active">
         <div class="container">
-            <h1>Buscar Municípios</h1>
+            <h1>Unidades de Saúdes</h1>
+            <h2>Número de Unidades de Saúde por Município</h2>
+            <h3>(Tabelas Unidade de Saúde e Município)</h3>
+            <button id="searchButton" style="float: right;">Buscar</button>
             <ul id="unidadesLista"></ul>
         </div>
       </div>
     
-      <div id="tab2" class="tab-content">
-        <h3>Conteúdo da Aba 2</h3>
-        <p>Este é o conteúdo da segunda aba.</p>
-      </div>
-    
       <div id="tab3" class="tab-content">
         <div class="container">
+            <h1>Doenças</h1>
+            <h2>Número de diagnósticos de cada doença</h2>
+            <h3>(Tabelas Paciente e Diagnóstico)</h3>
+            <button id="searchDoencasButton" style="float: right;">Buscar</button>
+            <ul id="doencaLista"></ul>
+        </div>
+      </div>
+    
+      <div id="tab1" class="tab-content">
+        <div class="container">
             <h1>Buscar Municípios</h1>
+            <h2>Pesquisar municípios pelo nome</h2>
             <input type="text" id="searchInput" placeholder="Digite o nome do município...">
             <ul id="resultList"></ul>
         </div>
       </div>
 
-    <script src="municipio.js"></script>
+    <script src="consultas.js"></script>
     <script type="module">
         import { renderizarTabela } from './util.js';
 
@@ -84,7 +96,26 @@
                 const unidades = await response.json();
                 const resultList = document.getElementById('unidadesLista');
                 resultList.innerHTML = renderizarTabela(unidades);;
-                console.log(unidades);
+            
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao buscar as unidades de saúde.');
+            }   
+        });
+        document.getElementById('searchDoencasButton').addEventListener('click', async function() {
+            try {
+                // Make a GET request to the backend API
+                const response = await fetch('http://localhost:3000/doenca');
+                
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar unidades de saúde');
+                }
+
+                // Parse the JSON response
+                const doencas = await response.json();
+                const resultList = document.getElementById('doencaLista');
+                resultList.innerHTML = renderizarTabela(doencas);;
             
             } catch (error) {
                 console.error('Erro:', error);

@@ -83,7 +83,7 @@ db.run(`
     CREATE TABLE IF NOT EXISTS  diagnostico (
         id_diagnostico INTEGER PRIMARY KEY AUTOINCREMENT,
         ref_paciente BIGINT NOT NULL,
-        ref_doenca VARCHAR(100) NULL,
+        ref_doenca VARCHAR(100) NOT NULL,
         FOREIGN KEY (ref_paciente) REFERENCES paciente(cpf_paciente),
         FOREIGN KEY (ref_doenca) REFERENCES doenca(nome_doenca)
     );
@@ -177,9 +177,21 @@ app.post('/inserir_atendimento', (req, res) => {
 
 app.get('/search', (req, res) => {
     const query = req.query.q;
-    
-    // Evitar SQL Injection com parâmetro de busca seguro
-    db.all(`SELECT * FROM municipio WHERE nome_municipio LIKE ?`, [`%${query}%`], (err, rows) => {
+    sql = `
+    SELECT
+        nome_municipio AS MUNICIPIO,
+        estado AS UF,
+        populacao AS POPULACAO,
+        taxa_consultas as CONSULTAS,
+        natalidade AS NATALIDADE,
+        mortalidade AS MORTALIDADE
+    FROM 
+        municipio
+    WHERE 
+        nome_municipio LIKE ?
+    `;
+
+    db.all(sql, [`%${query}%`], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
         } else {
@@ -189,10 +201,44 @@ app.get('/search', (req, res) => {
 });
 
 app.get('/unidade_saude', (req, res) => {
-    const query = req.query.q;
-    sql = `SELECT * FROM municipio;`;
+    sql = `
+        SELECT 
+            m.NOME_MUNICIPIO AS MUNICIPIO,
+            SUM(u.capacidade) AS CAPACIDADE_TOTAL
+        FROM 
+            municipio m
+        JOIN 
+            unidade_saude u ON m.id_municipio = u.ref_municipio
+        GROUP BY 
+            m.id_municipio;
+    `;
     
-    // Evitar SQL Injection com parâmetro de busca seguro
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            console.error(`Erro ao consultar. `, err.message);
+            return res.status(500).json({ error: `Erro ao consultar.` });
+        }
+        res.status(200).json(rows);
+    });
+});
+
+app.get('/doenca', (req, res) => {
+    sql = `
+        SELECT
+            doenca.nome_doenca AS DOENCA,
+            doenca.letalidade AS LETALIDADE,
+            doenca.contagioso AS CONTAGIOSO,
+            COUNT(b.ref_paciente) AS OCORRENCIAS
+        FROM
+            doenca
+        JOIN
+            diagnostico b ON doenca.nome_doenca = b.ref_doenca
+        GROUP BY
+            doenca.nome_doenca, doenca.letalidade, doenca.contagioso;
+        ODER BY
+            OCORRENCIAS DESC;
+    `;
+    
     db.all(sql, [], (err, rows) => {
         if (err) {
             console.error(`Erro ao consultar. `, err.message);
